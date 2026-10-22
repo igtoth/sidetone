@@ -6,7 +6,7 @@
 
 <p align="center">
   <b>A SIP softphone built for troubleshooting: place the call, see the ladder, and know why it failed.</b><br>
-  Test calls over UDP or WebRTC, pcap and pcapng analysis, RTP quality and MOS, plain-language diagnostics,<br>
+  Test calls over UDP, TCP, TLS or WebRTC, SRTP included, pcap and pcapng analysis, RTP quality and MOS, plain-language diagnostics,<br>
   an AI second opinion with your own keys, automated test suites and an MCP server, for Windows, macOS, Linux and the browser.
 </p>
 
@@ -55,7 +55,7 @@
   <tr>
     <td width="25%" valign="top">
       <h3>A real softphone</h3>
-      Several accounts and lines, hold, mute, blind and attended transfer, DTMF three ways, DND and auto answer, call forwarding, a voicemail lamp, SIP MESSAGE, microphone and speaker. SIP over UDP from the desktop, or over WebSocket with WebRTC from the browser.
+      Several accounts and lines, hold, mute, blind and attended transfer, DTMF three ways, DND and auto answer, call forwarding, a voicemail lamp, SIP MESSAGE, microphone and speaker. SIP over UDP, TCP or TLS from the desktop, with SDES or DTLS-SRTP, or over WebSocket with WebRTC from the browser.
     </td>
     <td width="25%" valign="top">
       <h3>It explains the call</h3>
