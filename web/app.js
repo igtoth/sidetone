@@ -3305,6 +3305,10 @@ const NATIVE_ACC_TABS = [
   ["Network", [
     ["profile.behavior.transport", "SIP transport", "select", "TCP and TLS keep one connection to the server; with TLS and no port, 5061 and DNS _sips._tcp are used", [["udp", "UDP"], ["tcp", "TCP"], ["tls", "TLS"]]],
     ["profile.behavior.tls_verify", "Check the server's TLS certificate", "bool", "turn off for labs and PBXs with self-signed certificates"],
+    ["profile.behavior.tls_ca_file", "Server CA bundle (private PKI)", "file", "PEM file of the CA(s) that signed the server certificate. Empty = public roots. Used only when the check above is on.", "ca-bundle"],
+    ["profile.behavior.tls_client_cert", "Client certificate (mutual TLS)", "file", "For servers that require a client certificate. A PKCS#12 bundle (.p12/.pfx) carries the certificate and key together; a PEM file carries the certificate chain.", "client-cert"],
+    ["profile.behavior.tls_client_key", "Client private key (PEM)", "file", "Only for a PEM certificate whose key is a separate file. Leave empty for a .p12/.pfx bundle, or a PEM that already contains the key.", "client-cert"],
+    ["profile.behavior.tls_client_pass", "Client bundle password", "password", "Password for the .p12/.pfx bundle, if it has one."],
     ["profile.behavior.local_ip", "Local IP", "opt", "empty = the interface the OS routes to the server"],
     ["profile.behavior.local_port", "Local SIP port", "number", "0 = random. Use 5060 to look like a desk phone."],
     ["profile.behavior.rport", "Request rport (RFC 3581)", "bool"],
@@ -3475,6 +3479,8 @@ function fieldHtml(f, value, id) {
       const rows = (value || []).map(([k, v]) => `<div class="hdr-row"><input placeholder="Name" value="${esc(k)}"><input placeholder="Value" value="${esc(v)}"><button type="button" class="linklike" data-del>Remove</button></div>`).join("");
       return `<div class="fld"><span>${esc(label)}</span><div class="hdrs" id="${id}">${rows}</div><button type="button" class="btn small" data-addhdr="${id}">Add header</button></div>`;
     }
+    case "file":
+      return `<label class="fld">${esc(label)} ${h}<span class="file-row"><input type="text" id="${id}" value="${esc(value ?? "")}" placeholder="${esc(t("No file selected"))}" spellcheck="false"><button type="button" class="btn small" data-pickfile="${id}" data-pickkind="${esc(opts || "client-cert")}">${esc(t("Browse…"))}</button></span></label>`;
     case "opt":
     default:
       return `<label class="fld">${esc(label)} ${h}<input id="${id}" value="${esc(value ?? "")}" spellcheck="false"></label>`;
@@ -3494,7 +3500,7 @@ function readField(f, id, obj) {
     case "codecs": v = readCodecPicker(el, []); break;
     case "codecs-global": v = readCodecPicker(el, CODEC_DEFAULTS); break;
     case "headers": v = [...el.querySelectorAll(".hdr-row")].map((r) => [r.children[0].value.trim(), r.children[1].value.trim()]).filter(([k]) => k); break;
-    case "opt": v = el.value.trim() || null; break;
+    case "opt": case "file": v = el.value.trim() || null; break;
     default: v = el.value;
   }
   set(obj, path, v);
@@ -3724,7 +3730,22 @@ async function renderSetBody() {
     markSetDirty();
     preview();
   });
-  form.addEventListener("click", (e) => {
+  form.addEventListener("click", async (e) => {
+    const pick = e.target.closest("[data-pickfile]");
+    if (pick) {
+      try {
+        const r = S.ctl.pickFile ? await S.ctl.pickFile(pick.dataset.pickkind) : null;
+        if (r && r.path) {
+          $("#" + pick.dataset.pickfile).value = r.path;
+          markSetDirty();
+        } else if (!r) {
+          toast(t("The file picker needs the desktop app. Paste the file path instead."), 5000);
+        }
+      } catch {
+        toast(t("The file picker needs the desktop app. Paste the file path instead."), 5000);
+      }
+      return;
+    }
     const up = e.target.closest("[data-up]");
     if (up) {
       const li = up.closest("li");
@@ -4430,6 +4451,36 @@ function bindChrome() {
   });
 }
 
+// First time the browser phone is used, explain what it can and cannot do and
+// point at the desktop app. Shown once per browser.
+function maybeShowWebLimits() {
+  if (!S.ctl || S.ctl.kind !== "web") return;
+  if (store.get("sidetone.webLimitsSeen")) return;
+  const dlg = $("#web-limits");
+  if (!dlg || dlg.open) return;
+  const can = [
+    "Place SIP calls over WebSocket (wss://) with WebRTC audio",
+    "Analyze pcap / pcapng captures and read the diagnosis",
+    "Decrypt TLS from a key log embedded in a pcapng",
+  ];
+  const need = [
+    "SIP over UDP, TCP or TLS (not only WebSocket)",
+    "Mutual TLS: a client certificate and a private CA bundle",
+    "Live packet capture off the wire",
+    "Reading certificates and captures from disk",
+  ];
+  $("#wl-title").textContent = t("You're using the browser version");
+  $("#wl-intro").textContent = t("The browser version is handy for a quick test, but it can only do part of what Sidetone does. For the full toolkit, use the desktop app.");
+  $("#wl-can-h").textContent = t("In the browser");
+  $("#wl-need-h").textContent = t("Desktop only");
+  $("#wl-can").innerHTML = can.map((s) => `<li>${esc(t(s))}</li>`).join("");
+  $("#wl-need").innerHTML = need.map((s) => `<li>${esc(t(s))}</li>`).join("");
+  $("#wl-download").textContent = t("Download the desktop app");
+  $("#wl-close").textContent = t("Continue in the browser");
+  dlg.addEventListener("close", () => store.set("sidetone.webLimitsSeen", true), { once: true });
+  dlg.showModal();
+}
+
 async function main() {
   initI18n();
   S.be = await pickBackend();
@@ -4486,6 +4537,7 @@ async function main() {
     await open(want);
     if (S.tab) showTab(S.tab);
   } else showWs(params.get("page") || (noAccounts ? "settings" : store.get("sidetone.page", "calls")), false);
+  maybeShowWebLimits();
   window.addEventListener("popstate", () => {
     const q = new URLSearchParams(location.search);
     const set = q.get("set");

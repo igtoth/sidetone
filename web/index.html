@@ -463,6 +463,21 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<dialog id="web-limits" class="prov-dialog">
+  <form method="dialog" class="prov-form">
+    <h2 id="wl-title">You're using the browser version</h2>
+    <p id="wl-intro">The browser version is handy for a quick test, but it can only do part of what Sidetone does. For the full toolkit, use the desktop app.</p>
+    <div class="wl-cols">
+      <div><h3 id="wl-can-h">In the browser</h3><ul id="wl-can"></ul></div>
+      <div><h3 id="wl-need-h">Desktop only</h3><ul id="wl-need"></ul></div>
+    </div>
+    <div class="row prov-actions">
+      <a class="btn primary" id="wl-download" href="https://github.com/igtoth/sidetone#downloads" target="_blank" rel="noopener">Download the desktop app</a>
+      <button type="submit" class="btn" id="wl-close">Continue in the browser</button>
+    </div>
+  </form>
+</dialog>
+
 <dialog id="prov-dialog" class="prov-dialog">
   <form id="prov-form" class="prov-form">
     <h2 id="prov-title">Fetch provisioning</h2>
