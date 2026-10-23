@@ -4809,7 +4809,7 @@ checksum = "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba"
 
 [[package]]
 name = "sidetone-cli"
-version = "0.1.25"
+version = "0.1.26"
 dependencies = [
  "anyhow",
  "clap",
@@ -4826,7 +4826,7 @@ dependencies = [
 
 [[package]]
 name = "sidetone-core"
-version = "0.1.25"
+version = "0.1.26"
 dependencies = [
  "quick-xml 0.41.0",
  "serde",
@@ -4835,7 +4835,7 @@ dependencies = [
 
 [[package]]
 name = "sidetone-desktop"
-version = "0.1.25"
+version = "0.1.26"
 dependencies = [
  "anyhow",
  "rfd",
@@ -4846,7 +4846,7 @@ dependencies = [
 
 [[package]]
 name = "sidetone-ua"
-version = "0.1.25"
+version = "0.1.26"
 dependencies = [
  "aes 0.8.4",
  "aes-gcm 0.10.3",
@@ -4878,7 +4878,7 @@ dependencies = [
 
 [[package]]
 name = "sidetone-wasm"
-version = "0.1.25"
+version = "0.1.26"
 dependencies = [
  "base64 0.22.1",
  "serde_json",
