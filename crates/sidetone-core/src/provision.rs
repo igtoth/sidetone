@@ -356,6 +356,10 @@ fn is_native_only_suffix(suf: &str) -> bool {
             suf,
             "transport"
                 | "tls_verify"
+                | "tls_ca_file"
+                | "tls_client_cert"
+                | "tls_client_key"
+                | "tls_client_pass"
                 | "local_ip"
                 | "local_port"
                 | "rport"
@@ -569,6 +573,10 @@ fn native_from_keys(keys: &HashMap<String, String>) -> Result<Value, String> {
     // Behavior defaults (mirrors sidetone-ua profile::Behavior::default except user_agent handling).
     let mut transport = "udp".to_string();
     let mut tls_verify = true;
+    let mut tls_ca_file = Value::Null;
+    let mut tls_client_cert = Value::Null;
+    let mut tls_client_key = Value::Null;
+    let mut tls_client_pass = Value::Null;
     let mut local_port: u16 = 0;
     let mut local_ip = Value::Null;
     let mut t1_ms: u64 = 500;
@@ -609,6 +617,18 @@ fn native_from_keys(keys: &HashMap<String, String>) -> Result<Value, String> {
     }
     if let Some(s) = keys.get(&format!("{ACCOUNT_PREFIX}tls_verify")) {
         tls_verify = parse_bool(s, "tls_verify")?;
+    }
+    if let Some(s) = keys.get(&format!("{ACCOUNT_PREFIX}tls_ca_file")) {
+        tls_ca_file = opt_null_str(s);
+    }
+    if let Some(s) = keys.get(&format!("{ACCOUNT_PREFIX}tls_client_cert")) {
+        tls_client_cert = opt_null_str(s);
+    }
+    if let Some(s) = keys.get(&format!("{ACCOUNT_PREFIX}tls_client_key")) {
+        tls_client_key = opt_null_str(s);
+    }
+    if let Some(s) = keys.get(&format!("{ACCOUNT_PREFIX}tls_client_pass")) {
+        tls_client_pass = opt_null_str(s);
     }
     if let Some(s) = keys.get(&format!("{ACCOUNT_PREFIX}local_port")) {
         local_port = parse_u16(s, "local_port")?;
@@ -754,6 +774,10 @@ fn native_from_keys(keys: &HashMap<String, String>) -> Result<Value, String> {
     let behavior = json!({
         "transport": transport,
         "tls_verify": tls_verify,
+        "tls_ca_file": tls_ca_file,
+        "tls_client_cert": tls_client_cert,
+        "tls_client_key": tls_client_key,
+        "tls_client_pass": tls_client_pass,
         "local_port": local_port,
         "local_ip": local_ip,
         "t1_ms": t1_ms,

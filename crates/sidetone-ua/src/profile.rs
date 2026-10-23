@@ -65,6 +65,21 @@ pub struct Behavior {
     pub transport: String,
     /// Check the TLS server certificate against public roots (off for self-signed labs).
     pub tls_verify: bool,
+    /// PEM bundle of CA certificates to trust for the TLS server (private PKI).
+    /// Empty uses the public roots. Ignored when `tls_verify` is off.
+    #[serde(default)]
+    pub tls_ca_file: Option<String>,
+    /// Client certificate for mutual TLS: a PEM file (certificate chain) or a
+    /// PKCS#12 bundle (.p12/.pfx). Empty = no client certificate.
+    #[serde(default)]
+    pub tls_client_cert: Option<String>,
+    /// PEM private key for the client certificate. Unused when the certificate
+    /// is a PKCS#12 bundle or a PEM file that already contains the key.
+    #[serde(default)]
+    pub tls_client_key: Option<String>,
+    /// Password for the PKCS#12 client bundle (used for nothing else).
+    #[serde(default)]
+    pub tls_client_pass: Option<String>,
     /// Local SIP port (0 = random).
     pub local_port: u16,
     /// Force the local IP advertised in Via/Contact/SDP (empty = route-based autodetect).
@@ -128,6 +143,10 @@ impl Default for Behavior {
         Behavior {
             transport: "udp".into(),
             tls_verify: true,
+            tls_ca_file: None,
+            tls_client_cert: None,
+            tls_client_key: None,
+            tls_client_pass: None,
             local_port: 0,
             local_ip: None,
             t1_ms: 500,
