@@ -1057,3 +1057,16 @@ tr[data-hrow]:focus-visible, #lines li:focus-visible { outline: 2px solid var(--
   .call-head dl { gap: 2px 12px; }
   .call-head dd { max-width: 32ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: bottom; }
 }
+
+/* Certificate file fields: path input with a Browse button. */
+.file-row { display: flex; gap: .5rem; align-items: center; }
+.file-row input { flex: 1 1 auto; min-width: 0; }
+.file-row .btn { flex: 0 0 auto; }
+
+/* Browser-version limitations dialog. */
+#web-limits .wl-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: .5rem 0 1rem; }
+#web-limits .wl-cols h3 { margin: 0 0 .35rem; font-size: .95rem; }
+#web-limits .wl-cols ul { margin: 0; padding-left: 1.1rem; }
+#web-limits .wl-cols li { margin: .2rem 0; }
+#web-limits #wl-download { text-decoration: none; }
+@media (max-width: 560px) { #web-limits .wl-cols { grid-template-columns: 1fr; } }

@@ -151,6 +151,11 @@ pub type SaveHook = std::sync::Arc<dyn Fn(&str, &[u8]) -> Result<Option<PathBuf>
 pub type WindowHook = Box<dyn Fn(&str) + Send + Sync>;
 pub static WINDOW_HOOK: std::sync::OnceLock<WindowHook> = std::sync::OnceLock::new();
 
+/// File-open hook supplied by the desktop app: shows a native picker for the
+/// given purpose ("client-cert", "ca-bundle", …) and returns the chosen path.
+pub type OpenHook = Box<dyn Fn(&str) -> Option<PathBuf> + Send + Sync>;
+pub static OPEN_HOOK: std::sync::OnceLock<OpenHook> = std::sync::OnceLock::new();
+
 fn handle(
     req: &mut Request,
     web: &Option<PathBuf>,
@@ -190,6 +195,9 @@ fn handle(
             if WINDOW_HOOK.get().is_some() {
                 features.push("window");
             }
+            if OPEN_HOOK.get().is_some() {
+                features.push("native-open");
+            }
             ok_bytes(json!({"mode": "server", "version": env!("CARGO_PKG_VERSION"), "features": features}).to_string().into_bytes(), "application/json")
         }
         (Method::Post, "/api/window") => match WINDOW_HOOK.get() {
@@ -217,6 +225,24 @@ fn handle(
                 Err(e) => err(500, e),
             },
             None => err(404, "native save not available"),
+        },
+        (Method::Post, "/api/pick-file") => match OPEN_HOOK.get() {
+            Some(f) => {
+                let kind = q.get("kind").map(|s| s.as_str()).unwrap_or("");
+                match f(kind) {
+                    Some(p) => ok_bytes(
+                        json!({ "path": p.display().to_string() })
+                            .to_string()
+                            .into_bytes(),
+                        "application/json",
+                    ),
+                    None => ok_bytes(
+                        json!({ "path": null }).to_string().into_bytes(),
+                        "application/json",
+                    ),
+                }
+            }
+            None => err(404, "native file picker not available"),
         },
         (Method::Get, "/api/sample") => match sidetone_core::synth::generate(
             q.get("name").map(|s| s.as_str()).unwrap_or("demo"),

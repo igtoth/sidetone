@@ -1674,7 +1674,14 @@ impl Core {
                         .unwrap_or(""),
                 )
                 .0;
-                let sock = Sock::connect(kind, server, &sni, p.behavior.tls_verify)?;
+                let tls = crate::transport::TlsOptions {
+                    verify: p.behavior.tls_verify,
+                    ca_file: p.behavior.tls_ca_file.clone(),
+                    client_cert_file: p.behavior.tls_client_cert.clone(),
+                    client_key_file: p.behavior.tls_client_key.clone(),
+                    client_pass: p.behavior.tls_client_pass.clone(),
+                };
+                let sock = Sock::connect(kind, server, &sni, &tls)?;
                 let local = sock.local;
                 return Ok((sock, local, Some(server)));
             }

@@ -57,6 +57,19 @@ fn main() {
             None => Ok(None),
         }
     });
+    // Native file picker for certificate paths (mutual TLS). Filters nudge the
+    // user toward the right file but always allow "All files".
+    let _ = sidetone_cli::serve::OPEN_HOOK.set(Box::new(|kind: &str| {
+        let dialog = match kind {
+            "ca-bundle" => rfd::FileDialog::new()
+                .add_filter("CA certificates (PEM)", &["pem", "crt", "cer"])
+                .add_filter("All files", &["*"]),
+            _ => rfd::FileDialog::new()
+                .add_filter("Client certificate (PKCS#12 or PEM)", &["p12", "pfx", "pem", "crt"])
+                .add_filter("All files", &["*"]),
+        };
+        dialog.pick_file()
+    }));
     let (url, _server) = sidetone_cli::serve::spawn("127.0.0.1:0", None, true, Some(save))
         .expect("start local server");
 

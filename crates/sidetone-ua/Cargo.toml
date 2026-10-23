@@ -30,6 +30,9 @@ libloading = "0.8"
 rcgen = { version = "0.13", default-features = false, features = ["ring"] }
 sha2 = "0.10"
 dimpl = { version = "0.7", default-features = false, features = ["rust-crypto"] }
+rustls-pemfile = "2"
+p12-keystore = "0.4.1"
+x509-parser = "0.18.1"
 
 [build-dependencies]
 cc = "1"
