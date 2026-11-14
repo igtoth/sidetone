@@ -387,15 +387,15 @@ until you reload the page (unless you save with remember enabled in Settings).
 
 Each version gets a release with installers for every platform: take the
 [latest release](https://github.com/igtoth/sidetone/releases/latest), or
-pick a file below (version 0.1.25).
+pick a file below (version 0.1.27).
 
 | Platform | Install | Portable (no install) | Command line (also standalone) |
 |---|---|---|---|
-| Windows 10/11 (x64) | [Installer (.exe)](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_0.1.25_x64-setup.exe) &middot; [MSI](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_0.1.25_x64_en-US.msi) | [Sidetone_0.1.25_x64_portable.zip](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_0.1.25_x64_portable.zip) | [sidetone-v0.1.25-x86_64-pc-windows-msvc.zip](https://github.com/igtoth/sidetone/releases/download/v0.1.25/sidetone-v0.1.25-x86_64-pc-windows-msvc.zip) |
-| macOS 11+ (Apple silicon) | [Sidetone_0.1.25_aarch64.dmg](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_0.1.25_aarch64.dmg) | [Sidetone_aarch64.app.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_aarch64.app.tar.gz) | [sidetone-v0.1.25-aarch64-apple-darwin.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.25/sidetone-v0.1.25-aarch64-apple-darwin.tar.gz) |
-| macOS 11+ (Intel) | [Sidetone_0.1.25_x64.dmg](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_0.1.25_x64.dmg) | [Sidetone_x64.app.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_x64.app.tar.gz) | [sidetone-v0.1.25-x86_64-apple-darwin.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.25/sidetone-v0.1.25-x86_64-apple-darwin.tar.gz) |
-| Linux (x86_64) | [.deb](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_0.1.25_amd64.deb) &middot; [.rpm](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone-0.1.25-1.x86_64.rpm) | [AppImage](https://github.com/igtoth/sidetone/releases/download/v0.1.25/Sidetone_0.1.25_amd64.AppImage) | [sidetone-v0.1.25-x86_64-unknown-linux-gnu.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.25/sidetone-v0.1.25-x86_64-unknown-linux-gnu.tar.gz) |
-| Linux (arm64) | | | [sidetone-v0.1.25-aarch64-unknown-linux-gnu.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.25/sidetone-v0.1.25-aarch64-unknown-linux-gnu.tar.gz) |
+| Windows 10/11 (x64) | [Installer (.exe)](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_0.1.27_x64-setup.exe) &middot; [MSI](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_0.1.27_x64_en-US.msi) | [Sidetone_0.1.27_x64_portable.zip](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_0.1.27_x64_portable.zip) | [sidetone-v0.1.27-x86_64-pc-windows-msvc.zip](https://github.com/igtoth/sidetone/releases/download/v0.1.27/sidetone-v0.1.27-x86_64-pc-windows-msvc.zip) |
+| macOS 11+ (Apple silicon) | [Sidetone_0.1.27_aarch64.dmg](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_0.1.27_aarch64.dmg) | [Sidetone_aarch64.app.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_aarch64.app.tar.gz) | [sidetone-v0.1.27-aarch64-apple-darwin.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.27/sidetone-v0.1.27-aarch64-apple-darwin.tar.gz) |
+| macOS 11+ (Intel) | [Sidetone_0.1.27_x64.dmg](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_0.1.27_x64.dmg) | [Sidetone_x64.app.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_x64.app.tar.gz) | [sidetone-v0.1.27-x86_64-apple-darwin.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.27/sidetone-v0.1.27-x86_64-apple-darwin.tar.gz) |
+| Linux (x86_64) | [.deb](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_0.1.27_amd64.deb) &middot; [.rpm](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone-0.1.27-1.x86_64.rpm) | [AppImage](https://github.com/igtoth/sidetone/releases/download/v0.1.27/Sidetone_0.1.27_amd64.AppImage) | [sidetone-v0.1.27-x86_64-unknown-linux-gnu.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.27/sidetone-v0.1.27-x86_64-unknown-linux-gnu.tar.gz) |
+| Linux (arm64) | | | [sidetone-v0.1.27-aarch64-unknown-linux-gnu.tar.gz](https://github.com/igtoth/sidetone/releases/download/v0.1.27/sidetone-v0.1.27-aarch64-unknown-linux-gnu.tar.gz) |
 | Web | no download: [open it in the browser](https://igtoth.github.io/sidetone/) | | |
 
 **Portable and standalone.** Nothing has to be installed:
@@ -415,20 +415,24 @@ choose More info &rsaquo; Run anyway. Allow Sidetone through Windows
 Firewall when asked, or incoming calls cannot reach it.
 
 **macOS.** Open the `.dmg` and drag Sidetone to Applications. The app is
-not signed yet, so the first time right-click it and choose Open (or run
-`xattr -dr com.apple.quarantine /Applications/Sidetone.app`). macOS asks
-for microphone access on the first call.
+not notarized by Apple yet, so the first time macOS refuses to open it: go to
+System Settings &rsaquo; Privacy & Security and choose Open Anyway (on macOS 14
+and older, right-click the app and choose Open). If macOS says the app "is
+damaged and can't be opened", that is the same block, not a broken download;
+clear it in Terminal with
+`xattr -dr com.apple.quarantine /Applications/Sidetone.app` (or the path of
+the portable `Sidetone.app`). macOS asks for microphone access on the first call.
 
-**Linux.** Debian and Ubuntu: `sudo apt install ./Sidetone_0.1.25_amd64.deb`.
-Fedora and openSUSE: `sudo dnf install ./Sidetone-0.1.25-1.x86_64.rpm`.
-Anywhere else: `chmod +x Sidetone_0.1.25_amd64.AppImage` and run it. The
+**Linux.** Debian and Ubuntu: `sudo apt install ./Sidetone_0.1.27_amd64.deb`.
+Fedora and openSUSE: `sudo dnf install ./Sidetone-0.1.27-1.x86_64.rpm`.
+Anywhere else: `chmod +x Sidetone_0.1.27_amd64.AppImage` and run it. The
 desktop app needs WebKitGTK 4.1 (present on current distributions).
 
 **Command line.** Unpack the archive and put `sidetone` on your `PATH`:
 
 ```sh
-tar xzf sidetone-v0.1.25-x86_64-unknown-linux-gnu.tar.gz
-sudo install sidetone-v0.1.25-x86_64-unknown-linux-gnu/sidetone /usr/local/bin/
+tar xzf sidetone-v0.1.27-x86_64-unknown-linux-gnu.tar.gz
+sudo install sidetone-v0.1.27-x86_64-unknown-linux-gnu/sidetone /usr/local/bin/
 sidetone              # the full app in your browser (same as sidetone serve --open)
 ```
 

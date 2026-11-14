@@ -44,7 +44,7 @@ jobs:
           body: |
             Alpha build of Sidetone. Desktop app: the installer for your system (.msi or -setup.exe on Windows, .dmg on macOS, .deb or .rpm on Linux), or a portable copy that needs no install (_portable.zip on Windows, .app.tar.gz on macOS, .AppImage on Linux). Command line: the sidetone-* archive for your platform; run sidetone with no arguments and the full app opens in the browser.
 
-            The installers are not signed yet: on Windows choose "More info, Run anyway"; on macOS right-click the app and choose Open the first time.
+            The installers are not signed yet: on Windows choose "More info, Run anyway"; on macOS choose System Settings, Privacy & Security, Open Anyway the first time. If macOS says Sidetone "is damaged", run `xattr -dr com.apple.quarantine /Applications/Sidetone.app` in Terminal (or the path of the portable Sidetone.app).
 
   cli:
     name: CLI ${{ matrix.target }}

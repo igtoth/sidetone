@@ -94,6 +94,8 @@ async function httpBackend() {
   return {
     kind: "http",
     features: info.features || [],
+    // Layout the desktop app saved on disk ("phone" or "full"); null elsewhere.
+    windowMode: info.window_mode || null,
     get,
     post,
     analyze: async (b) => (await post("api/analyze", b)).json(),
@@ -4386,6 +4388,9 @@ function bindChrome() {
     $$("[data-mode]").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.mode === m)));
     if (m === "phone" && ["trace", "analysis", "diag"].includes(S.page)) showWs("calls");
   };
+  // The desktop app keeps the choice on disk: its local server changes port on
+  // every start, so the WebView's storage does not survive a restart.
+  if (winCtl && S.be.windowMode) store.set("sidetone.mode", S.be.windowMode === "phone" ? "phone" : "troubleshoot");
   applyMode(store.get("sidetone.mode", "troubleshoot"));
   const openCompact = (page) => {
     showWs(page);

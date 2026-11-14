@@ -12,14 +12,8 @@ const PHONE_W: f64 = 400.0;
 const PHONE_MIN: (f64, f64) = (340.0, 560.0);
 
 /// Remembers the layout so the next start opens in the same size.
-fn mode_file() -> Option<std::path::PathBuf> {
-    sidetone_cli::phone::config_dir().map(|d| d.join("window-mode"))
-}
-
 fn saved_phone_mode() -> bool {
-    mode_file()
-        .and_then(|f| std::fs::read_to_string(f).ok())
-        .is_some_and(|s| s.trim() == "phone")
+    sidetone_cli::serve::saved_window_mode() == Some("phone")
 }
 
 /// Phone height: tall enough for the keypad and lines, but inside the screen.
@@ -65,7 +59,10 @@ fn main() {
                 .add_filter("CA certificates (PEM)", &["pem", "crt", "cer"])
                 .add_filter("All files", &["*"]),
             _ => rfd::FileDialog::new()
-                .add_filter("Client certificate (PKCS#12 or PEM)", &["p12", "pfx", "pem", "crt"])
+                .add_filter(
+                    "Client certificate (PKCS#12 or PEM)",
+                    &["p12", "pfx", "pem", "crt"],
+                )
                 .add_filter("All files", &["*"]),
         };
         dialog.pick_file()
@@ -95,7 +92,7 @@ fn main() {
             let _ = sidetone_cli::serve::WINDOW_HOOK.set(Box::new(move |mode: &str| {
                 let phone = mode == "phone";
                 let was = saved_phone_mode();
-                if let Some(f) = mode_file() {
+                if let Some(f) = sidetone_cli::serve::window_mode_file() {
                     if let Some(d) = f.parent() {
                         let _ = std::fs::create_dir_all(d);
                     }

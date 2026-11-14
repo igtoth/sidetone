@@ -81,7 +81,12 @@ impl Sock {
 
     /// Connects to `peer` over TCP or TLS. `sni` is the server name for TLS;
     /// `tls` controls server trust and the optional client certificate (mTLS).
-    pub fn connect(kind: Kind, peer: SocketAddr, sni: &str, tls: &TlsOptions) -> Result<Sock, String> {
+    pub fn connect(
+        kind: Kind,
+        peer: SocketAddr,
+        sni: &str,
+        tls: &TlsOptions,
+    ) -> Result<Sock, String> {
         let tcp = TcpStream::connect_timeout(&peer, Duration::from_secs(5))
             .map_err(|e| format!("cannot connect to {peer}: {e}"))?;
         tcp.set_nodelay(true).ok();
@@ -311,11 +316,7 @@ impl CertRequestLog {
         if !self.requested.load(Ordering::Relaxed) {
             return None;
         }
-        let issuers = self
-            .issuers
-            .lock()
-            .map(|g| g.clone())
-            .unwrap_or_default();
+        let issuers = self.issuers.lock().map(|g| g.clone()).unwrap_or_default();
         let who = if issuers.is_empty() {
             "any CA".to_string()
         } else {
@@ -351,7 +352,8 @@ pub fn tls_client_config(
     let builder = if opts.verify {
         let roots = match opts.ca_file.as_deref() {
             Some(p) if !p.is_empty() => {
-                let pem = std::fs::read(p).map_err(|e| format!("cannot read CA bundle {p}: {e}"))?;
+                let pem =
+                    std::fs::read(p).map_err(|e| format!("cannot read CA bundle {p}: {e}"))?;
                 root_store_from_ca(&pem, p)?
             }
             _ => {
@@ -439,12 +441,9 @@ fn load_pkcs12(
     data: &[u8],
     pass: &str,
 ) -> Result<(Vec<CertificateDer<'static>>, PrivateKeyDer<'static>), String> {
-    let ks = p12_keystore::KeyStore::from_pkcs12(
-        data,
-        pass,
-        p12_keystore::Pkcs12ImportPolicy::Relaxed,
-    )
-    .map_err(|e| format!("cannot open PKCS#12 bundle: {e}"))?;
+    let ks =
+        p12_keystore::KeyStore::from_pkcs12(data, pass, p12_keystore::Pkcs12ImportPolicy::Relaxed)
+            .map_err(|e| format!("cannot open PKCS#12 bundle: {e}"))?;
     let (_alias, chain) = ks
         .private_key_chain()
         .ok_or("PKCS#12 bundle has no private key")?;
@@ -635,7 +634,9 @@ mod mtls_tests {
             client_key_file: Some(key_path.to_string_lossy().into_owned()),
             client_pass: None,
         };
-        let (certs, _key) = load_client_identity(&opts).unwrap().expect("identity loads");
+        let (certs, _key) = load_client_identity(&opts)
+            .unwrap()
+            .expect("identity loads");
         assert_eq!(certs.len(), 1);
         // The full build must accept the signing key (any_supported_type).
         let (_cfg, log) = tls_client_config(&opts).unwrap();

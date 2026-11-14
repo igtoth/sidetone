@@ -151,6 +151,23 @@ pub type SaveHook = std::sync::Arc<dyn Fn(&str, &[u8]) -> Result<Option<PathBuf>
 pub type WindowHook = Box<dyn Fn(&str) + Send + Sync>;
 pub static WINDOW_HOOK: std::sync::OnceLock<WindowHook> = std::sync::OnceLock::new();
 
+/// Where the desktop app remembers its layout ("phone" or "full") between runs.
+/// The page cannot keep it itself: the local server takes a new port on every
+/// start, so the WebView's storage starts empty each time.
+pub fn window_mode_file() -> Option<PathBuf> {
+    phone::config_dir().map(|d| d.join("window-mode"))
+}
+
+/// The layout saved by the last run, if any.
+pub fn saved_window_mode() -> Option<&'static str> {
+    let s = std::fs::read_to_string(window_mode_file()?).ok()?;
+    match s.trim() {
+        "phone" => Some("phone"),
+        "full" => Some("full"),
+        _ => None,
+    }
+}
+
 /// File-open hook supplied by the desktop app: shows a native picker for the
 /// given purpose ("client-cert", "ca-bundle", …) and returns the chosen path.
 pub type OpenHook = Box<dyn Fn(&str) -> Option<PathBuf> + Send + Sync>;
@@ -198,7 +215,8 @@ fn handle(
             if OPEN_HOOK.get().is_some() {
                 features.push("native-open");
             }
-            ok_bytes(json!({"mode": "server", "version": env!("CARGO_PKG_VERSION"), "features": features}).to_string().into_bytes(), "application/json")
+            let window_mode = WINDOW_HOOK.get().and_then(|_| saved_window_mode());
+            ok_bytes(json!({"mode": "server", "version": env!("CARGO_PKG_VERSION"), "features": features, "window_mode": window_mode}).to_string().into_bytes(), "application/json")
         }
         (Method::Post, "/api/window") => match WINDOW_HOOK.get() {
             Some(f) => {
